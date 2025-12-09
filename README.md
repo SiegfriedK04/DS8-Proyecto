@@ -659,15 +659,15 @@ El bridge detecta y actualiza automáticamente el esquema:
 
 ## 📄 Licencia
 
-Este proyecto es de código abierto bajo licencia MIT.
+Este proyecto es de código abierto.
 
 ---
 
 ## 👨‍💻 Autor
 
 **Tu Nombre**  
-📧 Email: tu@email.com  
-🐙 GitHub: [@tu-usuario](https://github.com/tu-usuario)
+📧 Grupo 1: Gabriel Rodriguez / Carlos Jaen / Jose Avila / Christian Dutary / Yireikis Abrego
+🐙 GitHub: https://github.com/SiegfriedK04
 
 ---
 
@@ -676,7 +676,6 @@ Este proyecto es de código abierto bajo licencia MIT.
 - [Wokwi](https://wokwi.com) - Simulador de hardware
 - [Adafruit IO](https://io.adafruit.com) - Plataforma MQTT
 - [Railway](https://railway.app) - Hosting de PostgreSQL
-- Comunidad MicroPython
 
 ---
 
