@@ -2,6 +2,11 @@
 
 Sistema IoT completo de monitoreo ambiental con sensores virtuales (Wokwi), transmisión MQTT en tiempo real (Adafruit IO) y almacenamiento persistente (Railway PostgreSQL).
 
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![MicroPython](https://img.shields.io/badge/MicroPython-ESP32-green.svg)](https://micropython.org/)
+[![MQTT](https://img.shields.io/badge/MQTT-Adafruit%20IO-orange.svg)](https://io.adafruit.com/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue.svg)](https://www.postgresql.org/)
+
 ---
 
 ## 📋 Tabla de Contenidos
