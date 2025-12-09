@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "author": "Anonymous maker",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-pi-pico-w",
+      "id": "pico",
+      "top": 0,
+      "left": 0,
+      "attrs": { "env": "micropython-20241129-v1.24.1" }
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": -134.1,
+      "left": 13.8,
+      "attrs": { "temperature": "20.7" }
+    },
+    { "type": "wokwi-led", "id": "led1", "top": 102, "left": -197.8, "attrs": { "color": "red" } },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": 6.4,
+      "left": 168.8,
+      "attrs": { "pins": "i2c" }
+    },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldr1",
+      "top": -323.2,
+      "left": -172,
+      "attrs": {}
+    },
+    {
+      "type": "resistor",
+      "id": "r1",
+      "top": -280,
+      "left": -120,
+      "attrs": { "resistance": "10k" }
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz1",
+      "top": -199.2,
+      "left": 261,
+      "attrs": { "volume": "0.1" }
+    }
+  ],
+  "connections": [
+    [ "dht1:VCC", "pico:3V3", "red", [] ],
+    [ "dht1:GND", "pico:GND", "black", [] ],
+    [ "dht1:SDA", "pico:GP15", "green", [] ],
+    [ "ldr1:VCC", "pico:3V3", "red", [] ],
+    [ "ldr1:GND", "pico:GND", "black", [] ],
+    [ "ldr1:SIG", "r1:1", "orange", [] ],
+    [ "r1:2", "pico:GND", "black", [] ],
+    [ "r1:1", "pico:GP26", "orange", [] ],
+    [ "lcd1:SDA", "pico:GP4", "green", [] ],
+    [ "lcd1:SCL", "pico:GP5", "blue", [] ],
+    [ "lcd1:VCC", "pico:3V3", "red", [] ],
+    [ "lcd1:GND", "pico:GND", "black", [] ],
+    [ "led1:A", "pico:GP14", "orange", [] ],
+    [ "led1:C", "pico:GND", "black", [] ],
+    [ "bz1:2", "pico:GND", "black", [] ],
+    [ "ldr1:GND", "pico:GND.6", "black", [ "h0" ] ],
+    [ "ldr1:AO", "pico:GP26", "green", [ "h105.6", "v277.7" ] ],
+    [ "bz1:1", "pico:GP13", "green", [ "v0" ] ],
+    [ "bz1:2", "pico:GND.6", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
