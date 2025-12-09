@@ -1,0 +1,112 @@
+graph TB
+    subgraph WOKWI[🔧 WOKWI - Capa de Hardware Virtual]
+        ESP32[ESP32brMicrocontrolador]
+        DHT22[DHT22brTempHumedadbrGPIO 15]
+        LDR[LDR + ADCbrLuminosidadbrGPIO 26]
+        LCD[LCD I2C 16x2brSDA4 SCL5]
+        LED[LEDbrGPIO 14]
+        BUZZER[BuzzerbrGPIO 13]
+        
+        ESP32 -- DHT22
+        ESP32 -- LDR
+        ESP32 -- LCD
+        ESP32 -- LED
+        ESP32 -- BUZZER
+    end
+    
+    subgraph MICROPYTHON[📱 Capa de Software - MicroPython]
+        MAIN[main.pybrControlador Principal]
+        SENSORS[sensors.pybrDrivers Sensores]
+        ACTUATORS[actuators.pybrControl Actuadores]
+        MQTT_CLIENT[mqtt_client.pybrCliente MQTT]
+        UTILS[utils.pybrSimulación & Cálculos]
+        LCD_DRIVER[lcd_i2c.pybrDriver LCD]
+        
+        MAIN -- SENSORS
+        MAIN -- ACTUATORS
+        MAIN -- MQTT_CLIENT
+        MAIN -- UTILS
+        MAIN -- LCD_DRIVER
+    end
+    
+    subgraph ADAFRUIT[☁️ ADAFRUIT IO - Capa Cloud MQTT]
+        BROKER[MQTT Brokerbrio.adafruit.com1883]
+        
+        subgraph FEEDS_PUB[📤 Feeds Publicación]
+            F_TEMP[sensor_tempbrTemperatura]
+            F_HUM[sensor_humbrHumedad]
+            F_LDR_PCT[sensor_ldr_pctbrLuminosidad %]
+            F_LDR_RAW[sensor_ldr_rawbrADC Raw]
+            F_ESTADO[sensor_estadobrTimestamp]
+            F_COMFORT[sensor_comfortbrConfort Térmico]
+            F_EVENT[system_eventbrEventos Sistema]
+        end
+        
+        subgraph FEEDS_SUB[📥 Feeds Suscripción]
+            F_LED[comando_ledbrControl Remoto]
+        end
+        
+        DASHBOARD[📊 Dashboard WebbrVisualización Real-Time]
+        
+        BROKER -- F_TEMP
+        BROKER -- F_HUM
+        BROKER -- F_LDR_PCT
+        BROKER -- F_LDR_RAW
+        BROKER -- F_ESTADO
+        BROKER -- F_COMFORT
+        BROKER -- F_EVENT
+        BROKER -- F_LED
+        
+        F_TEMP -- DASHBOARD
+        F_HUM -- DASHBOARD
+        F_LDR_PCT -- DASHBOARD
+        F_COMFORT -- DASHBOARD
+        DASHBOARD -- F_LED
+    end
+    
+    subgraph BRIDGE[🌉 Bridge Python - Persistencia]
+        MQTT_BRIDGE[mqtt_to_database.pybrListener MQTT]
+        BUFFER[Buffer de DatosbrAcumulación]
+        PARSER[Parser & ValidatorbrManejo Anomalías]
+        
+        MQTT_BRIDGE -- BUFFER
+        BUFFER -- PARSER
+    end
+    
+    subgraph RAILWAY[🚂 RAILWAY - Capa de Persistencia]
+        POSTGRES[PostgreSQLbrBase de Datos]
+        
+        subgraph TABLES[📊 Tablas]
+            T_READINGS[sensor_readingsbrLecturas Históricas]
+            T_EVENTS[eventsbrLog Eventos]
+            T_STATS[statisticsbrMétricas Agregadas]
+        end
+        
+        POSTGRES -- T_READINGS
+        POSTGRES -- T_EVENTS
+        POSTGRES -- T_STATS
+    end
+    
+    %% Flujo de Datos Principal
+    ESP32 --Lectura cada 10s MAIN
+    MAIN --Publicación cada 20sbrMQTT Protocol BROKER
+    BROKER --Suscripción a Feeds MQTT_BRIDGE
+    PARSER --INSERT SQL POSTGRES
+    
+    %% Flujo de Control Remoto
+    DASHBOARD -.-Comando LED BROKER
+    BROKER -.-MQTT Callback MAIN
+    MAIN -.-Activar Actuador LED
+    
+    %% Estilos
+    classDef hardware fill#e1f5ff,stroke#01579b,stroke-width2px
+    classDef software fill#f3e5f5,stroke#4a148c,stroke-width2px
+    classDef cloud fill#fff3e0,stroke#e65100,stroke-width2px
+    classDef database fill#e8f5e9,stroke#1b5e20,stroke-width2px
+    classDef bridge fill#fce4ec,stroke#880e4f,stroke-width2px
+    
+    class ESP32,DHT22,LDR,LCD,LED,BUZZER hardware
+    class MAIN,SENSORS,ACTUATORS,MQTT_CLIENT,UTILS,LCD_DRIVER software
+    class BROKER,DASHBOARD,F_TEMP,F_HUM,F_LDR_PCT,F_LDR_RAW,F_ESTADO,F_COMFORT,F_EVENT,F_LED cloud
+    class POSTGRES,T_READINGS,T_EVENTS,T_STATS database
+    class MQTT_BRIDGE,BUFFER,PARSER bridge
