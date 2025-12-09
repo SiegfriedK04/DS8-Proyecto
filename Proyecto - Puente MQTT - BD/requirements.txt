@@ -1,0 +1,11 @@
+# requirements.txt
+# Para Railway - Solo Bridge MQTT → PostgreSQL
+
+# Cliente MQTT para conectar a Adafruit IO
+paho-mqtt==1.6.1
+
+# PostgreSQL driver
+psycopg2-binary==2.9.10
+
+# Opcional: para cargar .env en desarrollo local
+python-dotenv==1.0.0
